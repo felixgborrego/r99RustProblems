@@ -207,15 +207,50 @@ pub fn p12_decode(list: &[(usize, char)]) -> Vec<char> {
     buffer.into_iter().flatten().collect()
 }
 
+
 //P13 (**) Run-length encoding of a list (direct solution).
 // Implement the so-called run-length encoding data compression method directly. I.e. don't explicitly create the sublists containing the duplicates, as in problem P09, but only count them. As in problem P11, simplify the result list by replacing the singleton lists (1 X) by X.
 
 // Example:
 // * (encode-direct '(a a a a b c c a a d e e e e))
 // ((4 A) B (2 C) (2 A) D (4 E))
-//fn p13_encode_direct(list: &[char]) -> Vec<(usize, char)> {
-//    todo!()
-//}
+
+pub fn p13_encode_direct(list: &[char]) -> Vec<(usize, char)> {
+    struct AccDirect {
+        current_duplicate: Option<char>,
+        current_count: usize,
+        result: Vec<(usize, char)>,
+    }
+
+    let mut acc = AccDirect {
+        current_duplicate: None,
+        current_count: 0,
+        result: vec![],
+    };
+
+    fn accumulate<'a>(acc: &'a mut AccDirect, c: &char) -> &'a mut AccDirect {
+        if acc.current_duplicate == Some(*c) {
+            acc.current_count += 1;
+        } else {
+            if acc.current_duplicate.is_some() {
+                acc.result.push((acc.current_count, acc.current_duplicate.unwrap()));
+            }
+            acc.current_duplicate = Some(*c);
+            acc.current_count = 1;
+        }
+
+        acc
+    }
+
+    let acc = list.iter().fold(&mut acc, accumulate);
+    let mut results = acc.result.to_owned();
+
+    if acc.current_duplicate.is_some() {
+        results.push((acc.current_count, acc.current_duplicate.unwrap()));
+    }
+
+    results
+}
 
 #[cfg(test)]
 mod tests {
@@ -281,13 +316,13 @@ mod tests {
     #[test]
     fn test_p6_is_palindrome() {
         let li = vec![1, 1, 2, 3, 5];
-        assert_eq!(p6_is_palindrome(&li), false);
+        assert!(!p6_is_palindrome(&li));
 
         let li = vec![1, 2, 3, 2, 1];
-        assert_eq!(p6_is_palindrome(&li), true);
+        assert!(p6_is_palindrome(&li));
 
         let li = vec![1, 2, 3, 3, 2, 1];
-        assert_eq!(p6_is_palindrome(&li), true);
+        assert!(p6_is_palindrome(&li));
     }
 
     #[test]
@@ -321,7 +356,7 @@ mod tests {
                 vec!['c', 'c'],
                 vec!['a', 'a'],
                 vec!['d'],
-                vec!['e', 'e', 'e', 'e']
+                vec!['e', 'e', 'e', 'e'],
             ]
         );
     }
@@ -341,5 +376,18 @@ mod tests {
 
         let decoded = p12_decode(&encoded);
         assert_eq!(decoded, li);
+    }
+
+    #[test]
+    fn test_p13_encode_direct() {
+        let li = vec![
+            'a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e',
+        ];
+
+        let encoded = p13_encode_direct(&li);
+        assert_eq!(
+            encoded,
+            vec![(4, 'a'), (1, 'b'), (2, 'c'), (2, 'a'), (1, 'd'), (4, 'e')]
+        );
     }
 }
