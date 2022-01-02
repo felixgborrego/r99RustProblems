@@ -4,8 +4,6 @@ This is a pet project to learn Rust while I'm trying to code my own implementati
 
 You can find more information at [The 99 Problems](https://www.ic.unicamp.br/~meidanis/courses/mc336/2006s2/funcional/L-99_Ninety-Nine_Lisp_Problems.html)
 
-So far, I have implemented 13 of 99.
-
 ## Testing
 
 This project uses standard cargo, just install cargo and run:

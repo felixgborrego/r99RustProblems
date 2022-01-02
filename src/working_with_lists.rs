@@ -214,7 +214,6 @@ pub fn p12_decode(list: &[(usize, char)]) -> Vec<char> {
 // Example:
 // * (encode-direct '(a a a a b c c a a d e e e e))
 // ((4 A) B (2 C) (2 A) D (4 E))
-
 pub fn p13_encode_direct(list: &[char]) -> Vec<(usize, char)> {
     struct AccDirect {
         current_duplicate: Option<char>,
@@ -251,6 +250,16 @@ pub fn p13_encode_direct(list: &[char]) -> Vec<(usize, char)> {
 
     results
 }
+
+// P14 (*) Duplicate the elements of a list.
+// Example:
+// p14_duplicate(List('a, 'b, 'c, 'c, 'd))
+// Result:  List('a, 'a, 'b, 'b, 'c, 'c, 'c, 'c, 'd, 'd)
+pub fn p14_duplicate(list: &[char]) -> Vec<char> {
+    list.iter().flat_map(|element| [element, element])
+        .copied().collect()
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -389,5 +398,12 @@ mod tests {
             encoded,
             vec![(4, 'a'), (1, 'b'), (2, 'c'), (2, 'a'), (1, 'd'), (4, 'e')]
         );
+    }
+
+    #[test]
+    fn test_p14_duplicate() {
+        let li = vec!['a', 'b', 'c', 'c', 'd', ];
+        let duplicated = p14_duplicate(&li);
+        assert_eq!(duplicated, ['a', 'a', 'b','b', 'c', 'c','c','c', 'd', 'd'])
     }
 }
