@@ -1,8 +1,8 @@
 // Arithmetic
 pub mod p31 {
     // P31 (**) Determine whether a given integer number is prime.
-// 7.isPrime
-// result: true
+    // 7.isPrime
+    // result: true
     trait PrimeCheck {
         fn is_prime(&self) -> bool;
     }
@@ -48,7 +48,7 @@ mod p33 {
         fn is_coprime_to(&self, b: u16) -> bool;
     }
 
-    impl Coprime for u16{
+    impl Coprime for u16 {
         fn is_coprime_to(&self, b: u16) -> bool {
             p32_gcd(*self, b) == 1
         }
@@ -57,9 +57,9 @@ mod p33 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use super::p31::*;
     use super::p33::*;
+    use super::*;
 
     #[test]
     fn test_p31_is_prime() {

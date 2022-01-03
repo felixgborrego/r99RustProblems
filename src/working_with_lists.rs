@@ -207,7 +207,6 @@ pub fn p12_decode(list: &[(usize, char)]) -> Vec<char> {
     buffer.into_iter().flatten().collect()
 }
 
-
 //P13 (**) Run-length encoding of a list (direct solution).
 // Implement the so-called run-length encoding data compression method directly. I.e. don't explicitly create the sublists containing the duplicates, as in problem P09, but only count them. As in problem P11, simplify the result list by replacing the singleton lists (1 X) by X.
 
@@ -232,7 +231,8 @@ pub fn p13_encode_direct(list: &[char]) -> Vec<(usize, char)> {
             acc.current_count += 1;
         } else {
             if acc.current_duplicate.is_some() {
-                acc.result.push((acc.current_count, acc.current_duplicate.unwrap()));
+                acc.result
+                    .push((acc.current_count, acc.current_duplicate.unwrap()));
             }
             acc.current_duplicate = Some(*c);
             acc.current_count = 1;
@@ -256,10 +256,11 @@ pub fn p13_encode_direct(list: &[char]) -> Vec<(usize, char)> {
 // p14_duplicate(List('a, 'b, 'c, 'c, 'd))
 // Result:  List('a, 'a, 'b, 'b, 'c, 'c, 'c, 'c, 'd, 'd)
 pub fn p14_duplicate(list: &[char]) -> Vec<char> {
-    list.iter().flat_map(|element| [element, element])
-        .copied().collect()
+    list.iter()
+        .flat_map(|element| [element, element])
+        .copied()
+        .collect()
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -402,8 +403,11 @@ mod tests {
 
     #[test]
     fn test_p14_duplicate() {
-        let li = vec!['a', 'b', 'c', 'c', 'd', ];
+        let li = vec!['a', 'b', 'c', 'c', 'd'];
         let duplicated = p14_duplicate(&li);
-        assert_eq!(duplicated, ['a', 'a', 'b','b', 'c', 'c','c','c', 'd', 'd'])
+        assert_eq!(
+            duplicated,
+            ['a', 'a', 'b', 'b', 'c', 'c', 'c', 'c', 'd', 'd']
+        )
     }
 }
